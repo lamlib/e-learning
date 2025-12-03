@@ -1,0 +1,2292 @@
+openapi: 3.0.3
+info:
+  title: E-learning System API
+  description: |
+    API cho hệ thống E-learning phục vụ công việc giảng dạy và học tập.
+    Tài liệu này mô tả các endpoint REST API của hệ thống.
+  version: 1.0.2
+  contact:
+    name: Nguyễn Văn Nhật
+    email: lamlib2023@gmail.com
+
+servers:
+  - url: http://localhost:8000/api
+    description: Development server
+  - url: https://api.elearning.example.com/api
+    description: Production server
+
+tags:
+  - name: Authentication
+    description: Xác thực người dùng - Đăng nhập, đăng ký, đổi mật khẩu
+  - name: Admin
+    description: Quản lý hệ thống dành cho Admin
+  - name: Courses
+    description: Quản lý khóa học
+  - name: Lectures
+    description: Quản lý bài giảng
+  - name: Exercises
+    description: Quản lý bài tập
+  - name: Students
+    description: Quản lý học viên
+  - name: Teachers
+    description: Quản lý giảng viên
+  - name: Subjects
+    description: Quản lý thể loại khóa học
+  - name: News
+    description: Quản lý tin tức
+  - name: FAQ
+    description: Quản lý câu hỏi thường gặp
+  - name: Comments
+    description: Quản lý bình luận
+  - name: User
+    description: Quản lý thông tin người dùng
+
+paths:
+  # Authentication endpoints
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Đăng nhập
+      description: Đăng nhập vào hệ thống
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Đăng nhập thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Thông tin đăng nhập không đúng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Đăng ký tài khoản
+      description: Đăng ký tài khoản mới cho học viên
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Đăng ký thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+        '400':
+          description: Dữ liệu không hợp lệ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/change-password:
+    post:
+      tags:
+        - Authentication
+      summary: Thay đổi mật khẩu
+      description: Thay đổi mật khẩu của người dùng đã đăng nhập
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+      responses:
+        '200':
+          description: Đổi mật khẩu thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Mật khẩu cũ không đúng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/reset-password:
+    post:
+      tags:
+        - Authentication
+      summary: Thiết lập lại mật khẩu
+      description: Gửi email để thiết lập lại mật khẩu
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+      responses:
+        '200':
+          description: Email đã được gửi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # User endpoints
+  /users/profile:
+    get:
+      tags:
+        - User
+      summary: Lấy thông tin cá nhân
+      description: Lấy thông tin cá nhân của người dùng hiện tại
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Thông tin người dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Chưa đăng nhập
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      tags:
+        - User
+      summary: Cập nhật thông tin cá nhân
+      description: Cập nhật thông tin cá nhân của người dùng
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: Cập nhật thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  # Admin - User Management
+  /admin/users:
+    get:
+      tags:
+        - Admin
+      summary: Danh sách người dùng
+      description: Lấy danh sách tất cả người dùng (Admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Tìm kiếm theo tên, email
+        - name: role
+          in: query
+          schema:
+            type: string
+            enum: [admin, teacher, student]
+      responses:
+        '200':
+          description: Danh sách người dùng
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+    post:
+      tags:
+        - Admin
+      summary: Tạo người dùng mới
+      description: Tạo người dùng mới (Admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '201':
+          description: Tạo thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /admin/users/{id}:
+    get:
+      tags:
+        - Admin
+      summary: Chi tiết người dùng
+      description: Lấy thông tin chi tiết của một người dùng
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Thông tin người dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    put:
+      tags:
+        - Admin
+      summary: Cập nhật người dùng
+      description: Cập nhật thông tin người dùng
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+      responses:
+        '200':
+          description: Cập nhật thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    delete:
+      tags:
+        - Admin
+      summary: Xóa người dùng
+      description: Xóa người dùng (soft delete)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Xóa thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # Courses endpoints
+  /courses:
+    get:
+      tags:
+        - Courses
+      summary: Danh sách khóa học
+      description: Lấy danh sách khóa học
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: subject_id
+          in: query
+          schema:
+            type: integer
+        - name: teacher_id
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Danh sách khóa học
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Course'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+    post:
+      tags:
+        - Courses
+      summary: Tạo khóa học mới
+      description: Tạo khóa học mới (Admin/Teacher only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCourseRequest'
+      responses:
+        '201':
+          description: Tạo thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+
+  /courses/{id}:
+    get:
+      tags:
+        - Courses
+      summary: Chi tiết khóa học
+      description: Lấy thông tin chi tiết của một khóa học
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Thông tin khóa học
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseDetail'
+
+    put:
+      tags:
+        - Courses
+      summary: Cập nhật khóa học
+      description: Cập nhật thông tin khóa học
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCourseRequest'
+      responses:
+        '200':
+          description: Cập nhật thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+
+    delete:
+      tags:
+        - Courses
+      summary: Xóa khóa học
+      description: Xóa khóa học (soft delete)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Xóa thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /courses/{id}/enroll:
+    post:
+      tags:
+        - Courses
+      summary: Đăng ký khóa học
+      description: Học viên đăng ký tham gia khóa học
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Đăng ký thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /courses/{id}/students:
+    get:
+      tags:
+        - Courses
+      summary: Danh sách học viên của khóa học
+      description: Lấy danh sách học viên đã đăng ký khóa học
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Danh sách học viên
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+
+  # Lectures endpoints
+  /lectures:
+    get:
+      tags:
+        - Lectures
+      summary: Danh sách bài giảng
+      description: Lấy danh sách bài giảng
+      parameters:
+        - name: course_id
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Danh sách bài giảng
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Lecture'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+    post:
+      tags:
+        - Lectures
+      summary: Tạo bài giảng mới
+      description: Tạo bài giảng mới (Admin/Teacher only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLectureRequest'
+      responses:
+        '201':
+          description: Tạo thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lecture'
+
+  /lectures/{id}:
+    get:
+      tags:
+        - Lectures
+      summary: Chi tiết bài giảng
+      description: Lấy thông tin chi tiết của một bài giảng
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Thông tin bài giảng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LectureDetail'
+
+    put:
+      tags:
+        - Lectures
+      summary: Cập nhật bài giảng
+      description: Cập nhật thông tin bài giảng
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLectureRequest'
+      responses:
+        '200':
+          description: Cập nhật thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lecture'
+
+    delete:
+      tags:
+        - Lectures
+      summary: Xóa bài giảng
+      description: Xóa bài giảng (soft delete)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Xóa thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # Exercises endpoints
+  /exercises:
+    get:
+      tags:
+        - Exercises
+      summary: Danh sách bài tập
+      description: Lấy danh sách bài tập của một bài giảng
+      parameters:
+        - name: lecture_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Danh sách bài tập
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Exercise'
+
+    post:
+      tags:
+        - Exercises
+      summary: Tạo bài tập mới
+      description: Tạo bài tập mới (Admin/Teacher only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateExerciseRequest'
+      responses:
+        '201':
+          description: Tạo thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exercise'
+
+  /exercises/{id}:
+    get:
+      tags:
+        - Exercises
+      summary: Chi tiết bài tập
+      description: Lấy thông tin chi tiết của một bài tập
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Thông tin bài tập
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExerciseDetail'
+
+    put:
+      tags:
+        - Exercises
+      summary: Cập nhật bài tập
+      description: Cập nhật thông tin bài tập
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExerciseRequest'
+      responses:
+        '200':
+          description: Cập nhật thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exercise'
+
+    delete:
+      tags:
+        - Exercises
+      summary: Xóa bài tập
+      description: Xóa bài tập (soft delete)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Xóa thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /exercises/{id}/submit:
+    post:
+      tags:
+        - Exercises
+      summary: Nộp bài tập
+      description: Học viên nộp bài tập
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - answers
+              properties:
+                answers:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - question_id
+                      - answer_id
+                    properties:
+                      question_id:
+                        type: integer
+                      answer_id:
+                        type: integer
+      responses:
+        '200':
+          description: Nộp bài thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  score:
+                    type: number
+                  total_questions:
+                    type: integer
+                  correct_answers:
+                    type: integer
+
+  # Subjects endpoints
+  /subjects:
+    get:
+      tags:
+        - Subjects
+      summary: Danh sách thể loại
+      description: Lấy danh sách thể loại khóa học
+      responses:
+        '200':
+          description: Danh sách thể loại
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Subject'
+
+    post:
+      tags:
+        - Subjects
+      summary: Tạo thể loại mới
+      description: Tạo thể loại mới (Admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubjectRequest'
+      responses:
+        '201':
+          description: Tạo thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+
+  /subjects/{id}:
+    get:
+      tags:
+        - Subjects
+      summary: Chi tiết thể loại
+      description: Lấy thông tin chi tiết của một thể loại
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Thông tin thể loại
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+
+    put:
+      tags:
+        - Subjects
+      summary: Cập nhật thể loại
+      description: Cập nhật thông tin thể loại
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSubjectRequest'
+      responses:
+        '200':
+          description: Cập nhật thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+
+    delete:
+      tags:
+        - Subjects
+      summary: Xóa thể loại
+      description: Xóa thể loại (soft delete)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Xóa thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # News endpoints
+  /news:
+    get:
+      tags:
+        - News
+      summary: Danh sách tin tức
+      description: Lấy danh sách tin tức
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Danh sách tin tức
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/News'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+    post:
+      tags:
+        - News
+      summary: Tạo tin tức mới
+      description: Tạo tin tức mới (Admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNewsRequest'
+      responses:
+        '201':
+          description: Tạo thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/News'
+
+  /news/{id}:
+    get:
+      tags:
+        - News
+      summary: Chi tiết tin tức
+      description: Lấy thông tin chi tiết của một tin tức
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Thông tin tin tức
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/News'
+
+    put:
+      tags:
+        - News
+      summary: Cập nhật tin tức
+      description: Cập nhật thông tin tin tức
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNewsRequest'
+      responses:
+        '200':
+          description: Cập nhật thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/News'
+
+    delete:
+      tags:
+        - News
+      summary: Xóa tin tức
+      description: Xóa tin tức (soft delete)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Xóa thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # FAQ endpoints
+  /faq:
+    get:
+      tags:
+        - FAQ
+      summary: Danh sách câu hỏi thường gặp
+      description: Lấy danh sách câu hỏi thường gặp
+      responses:
+        '200':
+          description: Danh sách FAQ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FAQ'
+
+    post:
+      tags:
+        - FAQ
+      summary: Tạo FAQ mới
+      description: Tạo FAQ mới (Admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFAQRequest'
+      responses:
+        '201':
+          description: Tạo thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FAQ'
+
+  /faq/{id}:
+    get:
+      tags:
+        - FAQ
+      summary: Chi tiết FAQ
+      description: Lấy thông tin chi tiết của một FAQ
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Thông tin FAQ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FAQ'
+
+    put:
+      tags:
+        - FAQ
+      summary: Cập nhật FAQ
+      description: Cập nhật thông tin FAQ
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFAQRequest'
+      responses:
+        '200':
+          description: Cập nhật thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FAQ'
+
+    delete:
+      tags:
+        - FAQ
+      summary: Xóa FAQ
+      description: Xóa FAQ (soft delete)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Xóa thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # Comments endpoints
+  /comments:
+    get:
+      tags:
+        - Comments
+      summary: Danh sách bình luận
+      description: Lấy danh sách bình luận của một khóa học hoặc bài giảng
+      parameters:
+        - name: course_id
+          in: query
+          schema:
+            type: integer
+        - name: lecture_id
+          in: query
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Danh sách bình luận
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+    post:
+      tags:
+        - Comments
+      summary: Tạo bình luận mới
+      description: Tạo bình luận mới
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCommentRequest'
+      responses:
+        '201':
+          description: Tạo thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+
+  /comments/{id}:
+    delete:
+      tags:
+        - Comments
+      summary: Xóa bình luận
+      description: Xóa bình luận
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Xóa thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  # Students endpoints
+  /students:
+    get:
+      tags:
+        - Students
+      summary: Danh sách học viên
+      description: Lấy danh sách tất cả học viên
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Tìm kiếm theo tên, email
+      responses:
+        '200':
+          description: Danh sách học viên
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+  /students/{id}:
+    get:
+      tags:
+        - Students
+      summary: Chi tiết học viên
+      description: Lấy thông tin chi tiết của một học viên
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Thông tin học viên
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /students/{id}/courses:
+    get:
+      tags:
+        - Students
+      summary: Khóa học của học viên
+      description: Lấy danh sách khóa học mà học viên đã đăng ký
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Danh sách khóa học
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        course:
+                          $ref: '#/components/schemas/Course'
+                        enrolled_at:
+                          type: string
+                          format: date-time
+                        progress:
+                          type: number
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+  /students/{id}/progress:
+    get:
+      tags:
+        - Students
+      summary: Tiến độ học tập
+      description: Lấy thông tin tiến độ học tập của học viên
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: course_id
+          in: query
+          schema:
+            type: integer
+          description: Lọc theo khóa học
+      responses:
+        '200':
+          description: Thông tin tiến độ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_courses:
+                    type: integer
+                  completed_courses:
+                    type: integer
+                  in_progress_courses:
+                    type: integer
+                  total_lectures:
+                    type: integer
+                  completed_lectures:
+                    type: integer
+                  total_exercises:
+                    type: integer
+                  completed_exercises:
+                    type: integer
+                  average_score:
+                    type: number
+
+  /students/{id}/exercises:
+    get:
+      tags:
+        - Students
+      summary: Bài tập của học viên
+      description: Lấy danh sách bài tập mà học viên đã làm
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: course_id
+          in: query
+          schema:
+            type: integer
+          description: Lọc theo khóa học
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Danh sách bài tập
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        exercise:
+                          $ref: '#/components/schemas/Exercise'
+                        score:
+                          type: number
+                        submitted_at:
+                          type: string
+                          format: date-time
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+  # Teachers endpoints
+  /teachers:
+    get:
+      tags:
+        - Teachers
+      summary: Danh sách giảng viên
+      description: Lấy danh sách tất cả giảng viên
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Tìm kiếm theo tên, email
+      responses:
+        '200':
+          description: Danh sách giảng viên
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+  /teachers/{id}:
+    get:
+      tags:
+        - Teachers
+      summary: Chi tiết giảng viên
+      description: Lấy thông tin chi tiết của một giảng viên
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Thông tin giảng viên
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  phone:
+                    type: string
+                  avatar:
+                    type: string
+                    format: uri
+                  bio:
+                    type: string
+                  total_courses:
+                    type: integer
+                  total_students:
+                    type: integer
+
+  /teachers/{id}/courses:
+    get:
+      tags:
+        - Teachers
+      summary: Khóa học của giảng viên
+      description: Lấy danh sách khóa học mà giảng viên đang giảng dạy
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Danh sách khóa học
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Course'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+  /teachers/{id}/students:
+    get:
+      tags:
+        - Teachers
+      summary: Học viên của giảng viên
+      description: Lấy danh sách học viên trong các khóa học của giảng viên
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: course_id
+          in: query
+          schema:
+            type: integer
+          description: Lọc theo khóa học
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Danh sách học viên
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        student:
+                          $ref: '#/components/schemas/User'
+                        course:
+                          $ref: '#/components/schemas/Course'
+                        enrolled_at:
+                          type: string
+                          format: date-time
+                        progress:
+                          type: number
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+  # Search endpoints
+  /search:
+    get:
+      tags:
+        - User
+      summary: Tìm kiếm
+      description: Tìm kiếm giảng viên, học viên, khóa học
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Từ khóa tìm kiếm
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [user, course, teacher, student]
+          description: Loại tìm kiếm
+      responses:
+        '200':
+          description: Kết quả tìm kiếm
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  courses:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Course'
+
+  # Dashboard endpoints
+  /dashboard:
+    get:
+      tags:
+        - Admin
+      summary: Dashboard
+      description: Lấy thống kê tổng quan (Admin only)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Thống kê dashboard
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_users:
+                    type: integer
+                  total_courses:
+                    type: integer
+                  total_lectures:
+                    type: integer
+                  total_students:
+                    type: integer
+                  total_teachers:
+                    type: integer
+
+  /dashboard/history:
+    get:
+      tags:
+        - Admin
+      summary: Lịch sử khóa học
+      description: Lấy lịch sử khóa học và thông tin học viên
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: course_id
+          in: query
+          schema:
+            type: integer
+        - name: user_id
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lịch sử khóa học
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        course:
+                          $ref: '#/components/schemas/Course'
+                        user:
+                          $ref: '#/components/schemas/User'
+                        enrolled_at:
+                          type: string
+                          format: date-time
+                        progress:
+                          type: number
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          example: password123
+
+    LoginResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+          example: Bearer
+        user:
+          $ref: '#/components/schemas/User'
+
+    RegisterRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - password_confirmation
+      properties:
+        name:
+          type: string
+          example: Nguyễn Văn A
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          example: password123
+        password_confirmation:
+          type: string
+          format: password
+          example: password123
+        phone:
+          type: string
+          example: 0123456789
+
+    RegisterResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Đăng ký thành công
+        user:
+          $ref: '#/components/schemas/User'
+
+    ChangePasswordRequest:
+      type: object
+      required:
+        - old_password
+        - new_password
+        - new_password_confirmation
+      properties:
+        old_password:
+          type: string
+          format: password
+        new_password:
+          type: string
+          format: password
+        new_password_confirmation:
+          type: string
+          format: password
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        role:
+          type: string
+          enum: [admin, teacher, student]
+        avatar:
+          type: string
+          format: uri
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CreateUserRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - role
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        phone:
+          type: string
+        role:
+          type: string
+          enum: [admin, teacher, student]
+
+    UpdateUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        avatar:
+          type: string
+          format: uri
+
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        subject_id:
+          type: integer
+        teacher_id:
+          type: integer
+        image:
+          type: string
+          format: uri
+        status:
+          type: string
+          enum: [active, inactive]
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        subject:
+          $ref: '#/components/schemas/Subject'
+        teacher:
+          $ref: '#/components/schemas/User'
+
+    CourseDetail:
+      allOf:
+        - $ref: '#/components/schemas/Course'
+        - type: object
+          properties:
+            lectures:
+              type: array
+              items:
+                $ref: '#/components/schemas/Lecture'
+            students_count:
+              type: integer
+
+    CreateCourseRequest:
+      type: object
+      required:
+        - name
+        - description
+        - subject_id
+        - teacher_id
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        subject_id:
+          type: integer
+        teacher_id:
+          type: integer
+        image:
+          type: string
+          format: uri
+        status:
+          type: string
+          enum: [active, inactive]
+
+    UpdateCourseRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        subject_id:
+          type: integer
+        teacher_id:
+          type: integer
+        image:
+          type: string
+          format: uri
+        status:
+          type: string
+          enum: [active, inactive]
+
+    Lecture:
+      type: object
+      properties:
+        id:
+          type: integer
+        course_id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+        order_num:
+          type: integer
+        video_url:
+          type: string
+          format: uri
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    LectureDetail:
+      allOf:
+        - $ref: '#/components/schemas/Lecture'
+        - type: object
+          properties:
+            exercises:
+              type: array
+              items:
+                $ref: '#/components/schemas/Exercise'
+
+    CreateLectureRequest:
+      type: object
+      required:
+        - course_id
+        - name
+        - order_num
+      properties:
+        course_id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+        order_num:
+          type: integer
+        video_url:
+          type: string
+          format: uri
+
+    UpdateLectureRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+        order_num:
+          type: integer
+        video_url:
+          type: string
+          format: uri
+
+    Exercise:
+      type: object
+      properties:
+        id:
+          type: integer
+        lecture_id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        order_num:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    ExerciseDetail:
+      allOf:
+        - $ref: '#/components/schemas/Exercise'
+        - type: object
+          properties:
+            questions:
+              type: array
+              items:
+                $ref: '#/components/schemas/Question'
+
+    CreateExerciseRequest:
+      type: object
+      required:
+        - lecture_id
+        - name
+        - order_num
+      properties:
+        lecture_id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        order_num:
+          type: integer
+
+    UpdateExerciseRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        order_num:
+          type: integer
+
+    Question:
+      type: object
+      properties:
+        id:
+          type: integer
+        exercise_id:
+          type: integer
+        content:
+          type: string
+        description:
+          type: string
+        order_num:
+          type: integer
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Answer'
+
+    Answer:
+      type: object
+      properties:
+        id:
+          type: integer
+        question_id:
+          type: integer
+        content:
+          type: string
+        correct_flag:
+          type: boolean
+        order_num:
+          type: integer
+
+    Subject:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CreateSubjectRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+
+    UpdateSubjectRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+
+    News:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        image:
+          type: string
+          format: uri
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CreateNewsRequest:
+      type: object
+      required:
+        - title
+        - content
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        image:
+          type: string
+          format: uri
+
+    UpdateNewsRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        image:
+          type: string
+          format: uri
+
+    FAQ:
+      type: object
+      properties:
+        id:
+          type: integer
+        question:
+          type: string
+        answer:
+          type: string
+        order_num:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CreateFAQRequest:
+      type: object
+      required:
+        - question
+        - answer
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
+        order_num:
+          type: integer
+
+    UpdateFAQRequest:
+      type: object
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
+        order_num:
+          type: integer
+
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        course_id:
+          type: integer
+        lecture_id:
+          type: integer
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        user:
+          $ref: '#/components/schemas/User'
+
+    CreateCommentRequest:
+      type: object
+      required:
+        - content
+      properties:
+        course_id:
+          type: integer
+        lecture_id:
+          type: integer
+        content:
+          type: string
+
+    Pagination:
+      type: object
+      properties:
+        current_page:
+          type: integer
+        per_page:
+          type: integer
+        total:
+          type: integer
+        last_page:
+          type: integer
+
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Thành công
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+
