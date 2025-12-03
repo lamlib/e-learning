@@ -3,7 +3,7 @@
 ## Tài liệu mapping giữa API Endpoints và UI Components/Pages
 
 **Version:** 1.0.0  
-**Date:** 2024  
+**Date:** 2025 
 **Author:** Development Team
 
 ---

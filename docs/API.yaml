@@ -4,9 +4,9 @@ info:
   description: |
     API cho hệ thống E-learning phục vụ công việc giảng dạy và học tập.
     Tài liệu này mô tả các endpoint REST API của hệ thống.
-  version: 1.0.2
+  version: 1.0.0
   contact:
-    name: Nguyễn Văn Nhật
+    name: Lamlib
     email: lamlib2023@gmail.com
 
 servers:
