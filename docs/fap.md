@@ -64,17 +64,22 @@ Tài liệu này mô tả kiến trúc Frontend cho hệ thống E-learning, đ�
   - Fast development
 
 ### Component Library (Optional)
-- **shadcn/ui** hoặc **Radix UI**
-  - Accessible components
-  - Customizable
-  - Headless components
-  - Hoặc **MUI** nếu cần component library đầy đủ
+- **Custom Components** (Khuyến nghị)
+  - Components được design trên Figma
+  - Design inspired từ **Carbon Design System (IBM)**
+  - **Implementation:** Tailwind CSS + **Radix UI Primitives**
+  - Radix UI cho accessibility và behavior
+  - Tailwind CSS cho styling theo Figma design
+  - Document và test với Storybook
+- **MUI** nếu cần component library đầy đủ
 
 ### State Management
-- **Zustand** hoặc **Jotai**
-  - Lightweight
-  - Simple API
+- **Redux Toolkit**
+  - Industry standard, widely adopted
+  - Official Storybook support
+  - Strong ecosystem and documentation
   - TypeScript support
+  - RTK Query for server state (optional)
   - Hoặc **React Query (TanStack Query)** cho server state
 
 ### Data Fetching
@@ -391,10 +396,14 @@ e-learning-frontend/
 │   │   └── storage/
 │   │       └── tokenStorage.ts
 │   │
-│   ├── stores/               # Global state stores (Zustand)
-│   │   ├── authStore.ts
-│   │   ├── uiStore.ts
-│   │   └── cartStore.ts (nếu có)
+│   ├── stores/               # Global state stores (Redux Toolkit)
+│   │   ├── store.ts          # Root store configuration
+│   │   ├── hooks.ts          # Typed hooks (useAppDispatch, useAppSelector)
+│   │   ├── slices/           # Redux slices
+│   │   │   ├── authSlice.ts
+│   │   │   ├── uiSlice.ts
+│   │   │   └── cartSlice.ts (nếu có)
+│   │   └── middleware/       # Custom middleware (nếu có)
 │   │
 │   ├── utils/                # Utility functions
 │   │   ├── format.ts         # Format date, number, etc.
@@ -480,50 +489,116 @@ auth (base)
 
 ### Strategy
 
-**Server State:** React Query (TanStack Query)
+**Server State:** React Query (TanStack Query) hoặc RTK Query
 - API data caching
 - Background refetching
 - Optimistic updates
 - Error handling
+- **Note:** React Query được khuyến nghị vì phổ biến và độc lập, nhưng RTK Query cũng là lựa chọn tốt nếu muốn tích hợp với Redux Toolkit
 
-**Client State:** Zustand
+**Client State:** Redux Toolkit
 - UI state (sidebar collapsed, modals)
 - User preferences
-- Local form state (nếu không dùng React Hook Form)
+- Authentication state
+- Global application state
 
 **URL State:** Next.js Router
 - Filters, search queries
 - Pagination
 
-### Example: Auth Store (Zustand)
+### Why Redux Toolkit?
+
+**Lý do chọn Redux Toolkit:**
+- ✅ **Storybook Support:** Có addon chính thức `@storybook/addon-redux-toolkit`
+- ✅ **Industry Standard:** Được sử dụng rộng rãi trong các dự án lớn (72% apps)
+- ✅ **Ecosystem:** Nhiều middleware, tools, và tài liệu
+- ✅ **Team Experience:** Dễ onboard developers đã quen Redux
+- ✅ **Scalability:** Phù hợp cho dự án lớn và phức tạp
+- ✅ **DevTools:** Redux DevTools mạnh mẽ cho debugging
+
+### Example: Auth Slice (Redux Toolkit)
 
 ```typescript
-// stores/authStore.ts
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+// stores/slices/authSlice.ts
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 interface AuthState {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
-  login: (token: string, user: User) => void;
-  logout: () => void;
-  updateUser: (user: User) => void;
 }
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      user: null,
-      token: null,
-      isAuthenticated: false,
-      login: (token, user) => set({ token, user, isAuthenticated: true }),
-      logout: () => set({ user: null, token: null, isAuthenticated: false }),
-      updateUser: (user) => set({ user }),
+const initialState: AuthState = {
+  user: null,
+  token: null,
+  isAuthenticated: false,
+};
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    login: (state, action: PayloadAction<{ token: string; user: User }>) => {
+      state.token = action.payload.token;
+      state.user = action.payload.user;
+      state.isAuthenticated = true;
+    },
+    logout: (state) => {
+      state.token = null;
+      state.user = null;
+      state.isAuthenticated = false;
+    },
+    updateUser: (state, action: PayloadAction<User>) => {
+      state.user = action.payload;
+    },
+  },
+});
+
+const persistConfig = {
+  key: 'auth',
+  storage,
+};
+
+export const authReducer = persistReducer(persistConfig, authSlice.reducer);
+export const { login, logout, updateUser } = authSlice.actions;
+```
+
+### Example: Store Setup
+
+```typescript
+// stores/store.ts
+import { configureStore } from '@reduxjs/toolkit';
+import { authReducer } from './slices/authSlice';
+import { uiReducer } from './slices/uiSlice';
+
+export const store = configureStore({
+  reducer: {
+    auth: authReducer,
+    ui: uiReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['persist/PERSIST'],
+      },
     }),
-    { name: 'auth-storage' }
-  )
-);
+});
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+```
+
+### Example: Typed Hooks
+
+```typescript
+// stores/hooks.ts
+import { useDispatch, useSelector } from 'react-redux';
+import type { RootState, AppDispatch } from './store';
+
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
+export const useAppSelector = useSelector.withTypes<RootState>();
 ```
 
 ### Example: Course Query (React Query)
@@ -594,12 +669,12 @@ app/
    ```
    User submits LoginForm
    → POST /auth/login
-   → Store token in Zustand + localStorage
+   → Store token in Redux store (with redux-persist)
    → Redirect to dashboard
    ```
 
 2. **Token Management**
-   - Store in Zustand (persist)
+   - Store in Redux Toolkit (with redux-persist)
    - Add to Axios interceptor
    - Refresh token (nếu có)
 
@@ -648,7 +723,8 @@ export function middleware(request: NextRequest) {
 ```typescript
 // services/api/client.ts
 import axios from 'axios';
-import { useAuthStore } from '@/stores/authStore';
+import { store } from '@/stores/store';
+import { logout } from '@/stores/slices/authSlice';
 
 const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -659,7 +735,8 @@ const apiClient = axios.create({
 
 // Request interceptor - Add token
 apiClient.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().token;
+  const state = store.getState();
+  const token = state.auth.token;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -671,7 +748,7 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      useAuthStore.getState().logout();
+      store.dispatch(logout());
       window.location.href = '/login';
     }
     return Promise.reject(error);
@@ -732,7 +809,62 @@ export const useEnrollCourse = () => {
 
 ---
 
+## Design & Development Process
+
+### Design Phase: Figma với Carbon Design System Inspiration
+
+Components được design trên **Figma** với inspiration từ **Carbon Design System của IBM**:
+
+- **Design Reference:** Carbon Design System principles và patterns
+- **Design Tool:** Figma
+- **Design System:** Custom design system inspired by Carbon
+- **Components:** Buttons, Cards, Forms, Navigation, etc.
+- **Accessibility:** Follow WCAG 2.1 AA guidelines (như Carbon)
+- **Responsive Design:** Mobile-first approach
+
+### Design to Code Workflow
+
+```
+Figma Design (Carbon-inspired)
+    ↓
+Design Review & Approval
+    ↓
+Component Implementation (Radix UI Primitives + Tailwind CSS)
+    ↓
+Storybook Documentation
+    ↓
+Integration Testing
+```
+
+### Design System Principles (Carbon-inspired)
+
+- **Consistency:** Consistent spacing, typography, colors
+- **Accessibility:** WCAG 2.1 AA compliant
+- **Scalability:** Design tokens cho easy customization
+- **Documentation:** Clear guidelines trong Storybook
+
+---
+
 ## Styling Approach
+
+### Tailwind CSS + Radix UI Primitives
+
+**Approach:** Sử dụng **Radix UI Primitives** cho accessibility và behavior, kết hợp với **Tailwind CSS** cho styling theo Figma design.
+
+**Lợi ích:**
+- ✅ **Accessibility:** Radix UI primitives cung cấp accessibility built-in (ARIA, keyboard navigation, focus management)
+- ✅ **Styling Freedom:** Tailwind CSS cho full control over styling theo Figma design
+- ✅ **Headless Components:** Radix UI là headless, chỉ cung cấp behavior và accessibility
+- ✅ **TypeScript:** Full TypeScript support từ cả hai libraries
+- ✅ **Customizable:** Dễ dàng customize để match Figma designs
+
+### Installation
+
+```bash
+npm install @radix-ui/react-dialog @radix-ui/react-dropdown-menu @radix-ui/react-select
+npm install @radix-ui/react-button @radix-ui/react-checkbox @radix-ui/react-radio-group
+# ... và các primitives khác tùy nhu cầu
+```
 
 ### Tailwind CSS Configuration
 
@@ -757,35 +889,119 @@ export default {
 }
 ```
 
-### Component Styling
+### Component Styling Strategy
 
-- **Utility-first** với Tailwind
+- **Radix UI Primitives:** Cho behavior và accessibility (Dialog, Dropdown, Select, etc.)
+- **Tailwind CSS:** Cho styling theo Figma design
 - **Component variants** với `clsx` hoặc `cn` utility
 - **Responsive design** với Tailwind breakpoints
-- **Dark mode** (nếu cần) với Tailwind dark mode
+- **Dark mode** với Tailwind dark mode
 
-### Example Component
+### Example Component với Radix UI + Tailwind
 
 ```typescript
 // components/course/CourseCard.tsx
+import * as Dialog from '@radix-ui/react-dialog';
 import { cn } from '@/utils/helpers';
 
 interface CourseCardProps {
   title: string;
   thumbnail: string;
+  description?: string;
   className?: string;
 }
 
-export const CourseCard = ({ title, thumbnail, className }: CourseCardProps) => {
+export const CourseCard = ({ title, thumbnail, description, className }: CourseCardProps) => {
   return (
-    <div className={cn(
-      "rounded-lg shadow-md hover:shadow-lg transition-shadow",
-      "p-4 bg-white",
-      className
-    )}>
-      <img src={thumbnail} alt={title} className="w-full h-48 object-cover rounded" />
-      <h3 className="mt-4 text-lg font-semibold">{title}</h3>
-    </div>
+    <Dialog.Root>
+      <Dialog.Trigger asChild>
+        <button
+          className={cn(
+            "rounded-lg shadow-md hover:shadow-lg transition-shadow",
+            "p-4 bg-white text-left w-full",
+            "focus:outline-none focus:ring-2 focus:ring-primary-500",
+            className
+          )}
+        >
+          <img 
+            src={thumbnail} 
+            alt={title} 
+            className="w-full h-48 object-cover rounded mb-4" 
+          />
+          <h3 className="text-lg font-semibold mb-2">{title}</h3>
+          {description && (
+            <p className="text-sm text-gray-600">{description}</p>
+          )}
+        </button>
+      </Dialog.Trigger>
+      
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 bg-black/50" />
+        <Dialog.Content
+          className={cn(
+            "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+            "bg-white rounded-lg shadow-xl p-6 max-w-md w-full",
+            "focus:outline-none"
+          )}
+        >
+          <Dialog.Title className="text-xl font-bold mb-2">{title}</Dialog.Title>
+          <Dialog.Description className="text-gray-600 mb-4">
+            {description}
+          </Dialog.Description>
+          <Dialog.Close asChild>
+            <button className="px-4 py-2 bg-primary-500 text-white rounded hover:bg-primary-600">
+              Close
+            </button>
+          </Dialog.Close>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
+  );
+};
+```
+
+### Example: Button với Radix UI + Tailwind
+
+```typescript
+// components/ui/Button.tsx
+import * as ButtonPrimitive from '@radix-ui/react-button';
+import { cn } from '@/utils/helpers';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center rounded-md font-medium transition-colors",
+  "focus:outline-none focus:ring-2 focus:ring-offset-2",
+  "disabled:opacity-50 disabled:pointer-events-none",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500",
+        outline: "border border-gray-300 bg-transparent hover:bg-gray-50 focus:ring-gray-500",
+        ghost: "hover:bg-gray-100 focus:ring-gray-500",
+      },
+      size: {
+        default: "h-10 px-4 py-2",
+        sm: "h-9 px-3 text-sm",
+        lg: "h-11 px-8",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+);
+
+interface ButtonProps
+  extends React.ComponentPropsWithoutRef<typeof ButtonPrimitive.Root>,
+    VariantProps<typeof buttonVariants> {}
+
+export const Button = ({ className, variant, size, ...props }: ButtonProps) => {
+  return (
+    <ButtonPrimitive.Root
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
   );
 };
 ```
@@ -826,6 +1042,135 @@ const VideoPlayer = dynamic(() => import('@/components/lecture/VideoPlayer'), {
 
 ---
 
+## Storybook Integration
+
+### Overview
+
+**Storybook** được sử dụng để:
+- Document components được design từ Figma
+- Test components với different states
+- Showcase design variations
+- Verify implementation matches Figma designs
+- Test với Redux store states
+
+### Redux Toolkit Setup
+
+Storybook có hỗ trợ chính thức cho Redux Toolkit thông qua addon:
+
+```bash
+npm install --save-dev @storybook/addon-redux-toolkit
+```
+
+### Configuration
+
+```typescript
+// .storybook/main.ts
+import type { StorybookConfig } from '@storybook/nextjs-vite';
+
+const config: StorybookConfig = {
+  stories: ['../src/components/**/*.stories.@(ts|tsx)'],
+  addons: [
+    '@storybook/addon-redux-toolkit', // Redux Toolkit addon
+    // ... other addons
+  ],
+  // ...
+};
+
+export default config;
+```
+
+### Using Redux Store in Stories
+
+```typescript
+// components/course/CourseCard.stories.tsx
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { CourseCard } from './CourseCard';
+import { authSlice } from '@/stores/slices/authSlice';
+
+// Create mock store for Storybook
+const createMockStore = (initialState = {}) => {
+  return configureStore({
+    reducer: {
+      auth: authSlice.reducer,
+      // ... other reducers
+    },
+    preloadedState: initialState,
+  });
+};
+
+const meta = {
+  component: CourseCard,
+  decorators: [
+    (Story) => (
+      <Provider store={createMockStore({ auth: { isAuthenticated: true } })}>
+        <Story />
+      </Provider>
+    ),
+  ],
+} satisfies Meta<typeof CourseCard>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    course: {
+      id: 1,
+      title: 'Test Course',
+      // ...
+    },
+  },
+};
+```
+
+### Benefits
+
+- ✅ Official Storybook support
+- ✅ Easy to mock Redux state
+- ✅ Test components with different store states
+- ✅ Redux DevTools integration in Storybook
+
+### Design-to-Code Workflow với Storybook
+
+1. **Design Phase (Figma):**
+   - Design components inspired by Carbon Design System
+   - Create design tokens (colors, spacing, typography)
+   - Document component states và variants
+   - Export assets và specifications
+
+2. **Implementation Phase:**
+   - Implement components với **Radix UI Primitives + Tailwind CSS**
+   - Sử dụng Radix UI cho accessibility và behavior
+   - Sử dụng Tailwind CSS cho styling theo Figma specifications
+   - Match design từ Figma specifications
+   - Follow Carbon Design System principles (spacing, typography, etc.)
+
+3. **Documentation Phase (Storybook):**
+   - Create stories cho mỗi component
+   - Document all variants và states
+   - Include Figma design references
+   - Show component props và usage examples
+   - Test accessibility với a11y addon
+
+4. **Verification:**
+   - Compare Storybook với Figma designs
+   - Verify responsive behavior
+   - Test với different themes (light/dark)
+   - Accessibility testing
+
+### Storybook Best Practices
+
+- **Component Stories:** Mỗi component có stories file
+- **Design References:** Link đến Figma designs trong stories
+- **Variants:** Document tất cả design variants
+- **States:** Show all component states (default, hover, active, disabled, etc.)
+- **Accessibility:** Use a11y addon để verify accessibility
+- **Responsive:** Test với different viewport sizes
+
+---
+
 ## Development Workflow
 
 ### Environment Variables
@@ -845,18 +1190,43 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   }
 }
 ```
 
+### Design & Development Workflow
+
+1. **Design (Figma):**
+   - Design components inspired by Carbon Design System
+   - Create design tokens và specifications
+   - Review với team
+
+2. **Implementation:**
+   - Implement components với Tailwind CSS
+   - Match Figma designs
+   - Create Storybook stories
+
+3. **Documentation (Storybook):**
+   - Document components với stories
+   - Include Figma design references
+   - Test accessibility và responsive
+
+4. **Integration:**
+   - Integrate vào application
+   - Test với Redux store
+   - Verify với design specs
+
 ### Code Organization Rules
 
-1. **Components:** Một file một component
+1. **Components:** Một file một component + một file stories
 2. **Hooks:** Custom hooks trong `hooks/` folder
 3. **Services:** API calls trong `services/`
 4. **Types:** TypeScript types trong `types/`
 5. **Utils:** Pure functions trong `utils/`
+6. **Stories:** Component stories trong cùng folder với component
 
 ### Naming Conventions
 
@@ -874,9 +1244,11 @@ Kiến trúc Frontend được đề xuất:
 
 ✅ **Next.js 14+** với App Router  
 ✅ **TypeScript** cho type safety  
-✅ **Tailwind CSS** cho styling  
+✅ **Figma Design** với Carbon Design System inspiration  
+✅ **Radix UI Primitives + Tailwind CSS** cho component implementation  
+✅ **Storybook** cho component documentation và testing  
 ✅ **React Query** cho server state  
-✅ **Zustand** cho client state  
+✅ **Redux Toolkit** cho client state  
 ✅ **Module-based** organization  
 ✅ **Domain-driven** structure  
 ✅ **SEO-friendly** với SSR/SSG  
