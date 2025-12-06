@@ -258,4 +258,4 @@ Với cấu trúc thư mục mới là:
 
 Nếu storybook chưa được khởi động bạn có thể chạy command `npm run storybook`.
 
-Hãy làm quen với storybook theo guild tour khi mới bắt đầu.
+Nếu xóa hết các components sạch sẽ, cấu hình workspace cho storybook và sẵn sàng triển khai design system
