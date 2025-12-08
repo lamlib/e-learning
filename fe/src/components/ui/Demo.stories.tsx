@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Demo } from './Demo';
-import { ArrowRight, Download, Trash2, Plus } from 'lucide-react';
+import { ArrowRight, Download, Plus } from 'lucide-react';
 
 const meta = {
   title: 'UI/Demo',

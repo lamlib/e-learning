@@ -7,7 +7,7 @@
     + light: Using gray-90 theme 
 */
 :root {
-  /* Baseline, do not touch! */
+  /* Token from IBM Design Language */
   --ds-red-100: hsl(357, 73%, 10%);
   --ds-red-90: hsl(357, 91%, 17%);
   --ds-red-80: hsl(357, 79%, 26%);
@@ -106,13 +106,16 @@
   --ds-gray-80: hsl(0, 0%, 22%);
   --ds-gray-80-hover: hsl(0, 0%, 30%);
   --ds-gray-70: hsl(0, 0%, 32%);
+  --ds-gray-70-hover: hsl(0, 0%, 39%);
   --ds-gray-60: hsl(0, 0%, 44%);
   --ds-gray-60-hover: hsl(0, 0%, 38%);
   --ds-gray-50: hsl(0, 0%, 55%);
   --ds-gray-40: hsl(0, 0%, 66%);
   --ds-gray-30: hsl(0, 0%, 78%);
   --ds-gray-20: hsl(0, 0%, 88%);
+  --ds-gray-20-hover: hsl(0, 0%, 79%);
   --ds-gray-10: hsl(0, 0%, 96%);
+  --ds-gray-10-hover: hsl(0, 0%, 90%);
 
   --ds-warm-gray-100: hsl(0, 7%, 8%);
   --ds-warm-gray-90: hsl(0, 3%, 15%);
@@ -125,18 +128,59 @@
   --ds-warm-gray-20: hsl(10, 10%, 89%);
   --ds-warm-gray-10: hsl(12, 24%, 96%);
 
-  --ds-text-primary: var(--ds-gray-100);
-  --ds-text-secondary: var(--ds-gray-70);
-  --ds-text-placeholder: var(--ds-gray-40);
-  --ds-text-on-color: var(--ds-white);
-  --ds-text-on-color-disabled: var(--ds-gray-50);
-  --ds-text-helper: var(--ds-gray-60);
-  --ds-text-error: var(--ds-red-60);
-  --ds-text-inverse: var(--ds-white);
-  --ds-text-disabled: hsl(var(--ds-gray-100) / 25);
+  /* Token from Enterprise Design Sytem */
+  /*1. Màu nền - background*/
+  --ds-background: var(--ds-white);
+  --ds-background-hover: hsl(var(--ds-gray-50) / 12);
+  --ds-background-active: hsl(var(--ds-gray-50) / 50);
+  --ds-background-selected: hsl(var(--ds-gray-50) / 20);
+  --ds-background-selected-hover: hsl(var(--ds-gray-50) / 32);
+  --ds-background-inverse: var(--ds-gray-80);
+  --ds-background-inverse-hover: var(--ds-gray-80-hover);
+  --ds-background-brand: var(--ds-blue-60);
 
-  --background: #ffffff;
-  --foreground: #171717;
+  /*2. Lớp phủ - Layer*/
+  --ds-layer-01: var(--ds-gray-10); /*Màu nền cho các layer bên trên $background*/
+  --ds-layer-02: var(--ds-white); /*Màu nền cho các layer bên trên $layer-01*/
+  --ds-layer-03: var(--ds-gray-10); /*Màu nền cho các layer bên trên $layer-02*/
+  --ds-layer-hover-01: var(--ds-gray-10-hover); /*Màu trạng thái hover cho $layer-01*/
+  --ds-layer-hover-02: var(--ds-gray-10-hover); /*Màu trạng thái hover cho $layer-02*/
+  --ds-layer-hover-03: var(--ds-gray-10-hover); /*Màu trạng thái hover cho $layer-03*/
+  --ds-layer-active-01: var(--ds-gray-30); /*Màu trạng thái hover cho $layer-01*/
+  --ds-layer-active-02: var(--ds-gray-30); /*Màu trạng thái hover cho $layer-02*/
+  --ds-layer-active-03: var(--ds-gray-30); /*Màu trạng thái hover cho $layer-03*/
+  --ds-layer-selected-01: var(--ds-gray-20); /*Màu trạng thái selected cho $layer-01*/
+  --ds-layer-selected-02: var(--ds-gray-20); /*Màu trạng thái selected cho $layer-02*/
+  --ds-layer-selected-03: var(--ds-gray-20); /*Màu trạng thái selected cho $layer-03*/
+  --ds-layer-selected-hover-01: var(--ds-gray-20-hover); /*Màu trạng thái selected hover cho $layer-01*/
+  --ds-layer-selected-hover-02: var(--ds-gray-20-hover); /*Màu trạng thái selected hover cho $layer-02*/
+  --ds-layer-selected-hover-03: var(--ds-gray-20-hover); /*Màu trạng thái selected hover cho $layer-03*/
+  --ds-layer-selected-inverse: var(--ds-gray-100); /*Màu ở trạng thái tương phản cao 4.5:1 AA*/
+  --ds-layer-selected-disabled: var(--ds-gray-50); /*Màu trạng thái disabled cho selected*/
+
+  /*3. Đường viền - Border*/
+  --ds-border-interactive: var(--ds-blue-60); /*Màu viền interactive hoặc selected*/
+  --ds-border-subtle-00: var(--ds-gray-20); /*Màu viền nhẹ nhàng cho $background*/
+  --ds-border-subtle-01: var(--ds-gray-30); /*Màu viền nhẹ nhàng cho $layer-01*/
+  --ds-border-subtle-02: var(--ds-gray-20); /*Màu viền nhẹ nhàng cho $layer-02*/
+  --ds-border-subtle-03: var(--ds-gray-30); /*Màu viền nhẹ nhàng cho $layer-03*/
+  --ds-border-subtle-selected-01: var(--ds-gray-30); /*Màu viền selected cho $border-subtle-01*/
+  --ds-border-subtle-selected-02: var(--ds-gray-30); /*Màu viền selected cho $border-subtle-02*/
+  --ds-border-subtle-selected-03: var(--ds-gray-30); /*Màu viền selected cho $border-subtle-03*/
+
+  --ds-border-strong-01: var(--ds-gray-50); /*Màu viền có độ tương phản màu 3:1 AA trên $layer-01; phối với $field-01*/
+  --ds-border-strong-02: var(--ds-gray-50); /*Màu viền có độ tương phản màu 3:1 AA trên $layer-02; phối với $field-02*/
+  --ds-border-strong-03: var(--ds-gray-50); /*Màu viền có độ tương phản màu 3:1 AA trên $layer-03; phối với $field-03*/
+
+  --ds-border-tile-01: var(--ds-gray-30); /*Màu viền dùng cho ô (tile) trên lớp $layer-01, với nền phía sau là $background*/
+  --ds-border-tile-02: var(--ds-gray-40); /*Màu viền dùng cho ô (tile) trên lớp $field-02, với nền phía sau là $layer-01*/
+  --ds-border-tile-03: var(--ds-gray-30); /*Màu viền dùng cho ô (tile) trên lớp $field-03, với nền phía sau là $layer-02*/
+
+  --ds-border-inverse: var(--ds-gray-100); /*Màu viền có độ tương phản màu 4.5:1 AA trên tất cả các layer, đây là màu viên có độ tương phản cao nhất*/
+  --ds-border-disabled: var(--ds-gray-30); /*Màu viền trạng thái disabled cho tất cả border (ngoại trừ border-subtle)*/
+
+  --background: var(--ds-background);
+  --foreground: var(--ds-text-primary);
 
   --ds-button-primary: var(--ds-blue-60);
   --ds-button-primary-hover: var(--ds-blue-60-hover);
@@ -153,6 +197,23 @@
   --ds-button-danger-active: var(--ds-red-80);
   --ds-button-separator: var(--ds-gray-20);
   --ds-button-disabled: var(--ds-gray-30);
+
+  /*4. Chữ - Text*/
+  --ds-text-primary: var(--ds-gray-100);
+  --ds-text-secondary: var(--ds-gray-70);
+  --ds-text-placeholder: var(--ds-gray-40);
+  --ds-text-on-color: var(--ds-white);
+  --ds-text-on-color-disabled: var(--ds-gray-50);
+  --ds-text-helper: var(--ds-gray-60);
+  --ds-text-error: var(--ds-red-60);
+  --ds-text-inverse: var(--ds-white);
+  --ds-text-disabled: hsl(var(--ds-gray-100) / 25);
+
+  /*5. Đường dẫn - Link*/
+  --ds-link-primary: var(--ds-blue-60); /*Màu cho đường dẫn primary hoặc nút ghost*/
+  --ds-link-primary-hover: var(--ds-blue-70); /*Màu cho trạng thái hover của $link-primary*/
+  --ds-link-secondary: var(--ds-blue-70); /*Màu cho đường dẫn secondary cho màu nền có độ tương phản thấp hơn*/
+
 
   --ds-focus: var(--ds-blue-60);
   --ds-focus-inset: var(--ds-white);
@@ -238,6 +299,53 @@
 @media (prefers-color-scheme: dark) {
   :root {
 
+    --ds-background: var(--ds-gray-90);
+    --ds-background-hover: hsl(var(--ds-gray-50) / 16);
+    --ds-background-active: hsl(var(--ds-gray-50) / 40);
+    --ds-background-selected: hsl(var(--ds-gray-50) / 24);
+    --ds-background-selected-hover: hsl(var(--ds-gray-50) / 32);
+    --ds-background-inverse: var(--ds-gray-10);
+    --ds-background-inverse-hover: var(--ds-gray-10-hover);
+    --ds-background-brand: var(--ds-blue-60);
+
+    --ds-layer-01: var(--ds-gray-80); /*Màu nền cho các layer bên trên $background*/
+    --ds-layer-02: var(--ds-gray-70); /*Màu nền cho các layer bên trên $layer-01*/
+    --ds-layer-03: var(--ds-gray-60); /*Màu nền cho các layer bên trên $layer-02*/
+    --ds-layer-hover-01: var(--ds-gray-80-hover); /*Màu trạng thái hover cho $layer-01*/
+    --ds-layer-hover-02: var(--ds-gray-70-hover); /*Màu trạng thái hover cho $layer-02*/
+    --ds-layer-hover-03: var(--ds-gray-60-hover); /*Màu trạng thái hover cho $layer-03*/
+    --ds-layer-active-01: var(--ds-gray-60); /*Màu trạng thái hover cho $layer-01*/
+    --ds-layer-active-02: var(--ds-gray-50); /*Màu trạng thái hover cho $layer-02*/
+    --ds-layer-active-03: var(--ds-gray-80); /*Màu trạng thái hover cho $layer-03*/
+    --ds-layer-selected-01: var(--ds-gray-70); /*Màu trạng thái selected cho $layer-01*/
+    --ds-layer-selected-02: var(--ds-gray-60); /*Màu trạng thái selected cho $layer-02*/
+    --ds-layer-selected-03: var(--ds-gray-70); /*Màu trạng thái selected cho $layer-03*/
+    --ds-layer-selected-hover-01: var(--ds-gray-70-hover); /*Màu trạng thái selected hover cho $layer-01*/
+    --ds-layer-selected-hover-02: var(--ds-gray-60-hover); /*Màu trạng thái selected hover cho $layer-02*/
+    --ds-layer-selected-hover-03: var(--ds-gray-70-hover); /*Màu trạng thái selected hover cho $layer-03*/
+    --ds-layer-selected-inverse: var(--ds-gray-10); /*Màu ở trạng thái tương phản cao 4.5:1 AA*/
+    --ds-layer-selected-disabled: var(--ds-gray-50); /*Màu trạng thái disabled cho selected*/
+
+    --ds-border-interactive: var(--ds-blue-50); /*Màu viền interactive hoặc selected*/
+    --ds-border-subtle-00: var(--ds-gray-70); /*Màu viền nhẹ nhàng cho $background*/
+    --ds-border-subtle-01: var(--ds-gray-70); /*Màu viền nhẹ nhàng cho $layer-01*/
+    --ds-border-subtle-02: var(--ds-gray-60); /*Màu viền nhẹ nhàng cho $layer-02*/
+    --ds-border-subtle-03: var(--ds-gray-50); /*Màu viền nhẹ nhàng cho $layer-03*/
+    --ds-border-subtle-selected-01: var(--ds-gray-60); /*Màu viền selected cho $border-subtle-01*/
+    --ds-border-subtle-selected-02: var(--ds-gray-50); /*Màu viền selected cho $border-subtle-02*/
+    --ds-border-subtle-selected-03: var(--ds-gray-40); /*Màu viền selected cho $border-subtle-03*/
+  
+    --ds-border-strong-01: var(--ds-gray-50); /*Màu viền có độ tương phản màu 3:1 AA trên $layer-01; phối với $field-01*/
+    --ds-border-strong-02: var(--ds-gray-40); /*Màu viền có độ tương phản màu 3:1 AA trên $layer-02; phối với $field-02*/
+    --ds-border-strong-03: var(--ds-gray-30); /*Màu viền có độ tương phản màu 3:1 AA trên $layer-03; phối với $field-03*/
+  
+    --ds-border-tile-01: var(--ds-gray-60); /*Màu viền dùng cho ô (tile) trên lớp $layer-01, với nền phía sau là $background*/
+    --ds-border-tile-02: var(--ds-gray-50); /*Màu viền dùng cho ô (tile) trên lớp $field-02, với nền phía sau là $layer-01*/
+    --ds-border-tile-03: var(--ds-gray-40); /*Màu viền dùng cho ô (tile) trên lớp $field-03, với nền phía sau là $layer-02*/
+  
+    --ds-border-inverse: var(--ds-gray-10); /*Màu viền có độ tương phản màu 4.5:1 AA trên tất cả các layer, đây là màu viên có độ tương phản cao nhất*/
+    --ds-border-disabled: hsl(var(--ds-gray-50) / 50) ; /*Màu viền trạng thái disabled cho tất cả border (ngoại trừ border-subtle)*/
+
     --ds-text-primary: var(--ds-gray-10);
     --ds-text-secondary: var(--ds-gray-30);
     --ds-text-placeholder: var(--ds-gray-60);
@@ -248,8 +356,9 @@
     --ds-text-inverse: var(--ds-gray-100);
     --ds-text-disabled: hsl(var(--ds-gray-10) / 25);
 
-    --background: #0a0a0a;
-    --foreground: #ededed;
+
+    --background: var(--ds-background);
+    --foreground: var(--ds-text-primary);
 
     --ds-button-primary: var(--ds-blue-60);
     --ds-button-primary-hover: var(--ds-blue-60-hover);
@@ -275,8 +384,8 @@
   --color-foreground: var(--foreground);
 
   /* Typography system */
-  --font-sans: var(--font-lm-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-ibm-flex-sans);
+  --font-mono: var(--font-ibm-flex-mono);
 
   --color-ds-button-primary: var(--ds-button-primary);
   --color-ds-button-primary-hover: var(--ds-button-primary-hover);
