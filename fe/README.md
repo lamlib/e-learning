@@ -93,44 +93,6 @@ npm run start
 ```
 
 **5. Cài đặt thêm Component Library dựa trên FAP**
-```bash
-# Radix UI Primitives theo reference để build design system với chuẩn ARIA
-npm install radix-ui@1.4.3
-```
-Lệnh này chỉ thêm `radix-ui@1.4.3` library vào `node_modules` và `packages.json`  
-**6. Viết Component UI đầu tiên**  
-Theo như cấu trúc thư mục được đề cập trong FAP tạo một tệp là `./src/components/ui/Popover.jsx` với nội dung sau:
-```tsx
-import { Popover } from "radix-ui";
-
-const StandardPopover = () => (
-    <Popover.Root>
-        <Popover.Trigger>More info</Popover.Trigger>
-        <Popover.Portal>
-            <Popover.Content>
-                Some more info...
-            </Popover.Content>
-        </Popover.Portal>
-    </Popover.Root>
-);
-
-export default StandardPopover;
-```
-
-Tại file `./src/app/page.tsx` cập nhập thành nội dung sau:
-```tsx
-import StandardPopover from "../components/ui/Popover";
-
-export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <StandardPopover></StandardPopover>
-    </div>
-  );
-}
-```
-
-Bạn sẽ thấy có một text "More info" nằm ở giữa màn hình, khi click vào thì hiển thị thêm text "Some more info..." và chúng hoàn toàn chưa được style. 
 
 Lúc này chúng ta cần áp dụng design system, với giao diện yêu cầu chuyên nghiệp, phù hợp cho enterprise, lựa chọn
 [Carbon Design System](https://carbondesignsystem.com/) của IBM là hợp lý.
@@ -164,7 +126,6 @@ Tiếp đó storybook tự động thêm các gói sau vào devDependencies, và
   },
   "dependencies": {
     "next": "16.0.7",
-    "radix-ui": "^1.4.3",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
@@ -219,9 +180,6 @@ Với cấu trúc thư mục mới là:
 │   │   ├── globals.css
 │   │   ├── layout.tsx
 │   │   └── page.tsx
-│   ├── components
-│   │   └── ui
-│   │       └── Popover.tsx
 │   └── stories                      #new
 │       ├── assets                   #new
 │       │   ├── accessibility.png    #new  
@@ -259,3 +217,19 @@ Với cấu trúc thư mục mới là:
 Nếu storybook chưa được khởi động bạn có thể chạy command `npm run storybook`.
 
 Nếu xóa hết các components sạch sẽ, cấu hình workspace cho storybook và sẵn sàng triển khai design system
+
+Cài thêm một số package cần thiết
+- lucide-react@0.556.0
+- tailwind-merge@3.4.0
+- clsx@2.1.1
+- class-variance-authority@0.7.1
+
+Sau đó viết utils hỗ trợ tailwind merge tại `./src/utils/cn.ts`
+
+Viết component button đầu tiên, cài pagekage radix:
+```bash
+npm install @radix-ui/react-slot@1.2.4
+```
+
+Sau khi cài xong generated rule figma dùng chính tool viết rule của Figma MCP.
+Sau đó viết một button trước
