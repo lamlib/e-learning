@@ -12,93 +12,111 @@
   --ds-red-90: hsl(357, 91%, 17%);
   --ds-red-80: hsl(357, 79%, 26%);
   --ds-red-70: hsl(357, 73%, 37%);
+  --ds-red-70-hover: hsl(357, 73%, 44%);
   --ds-red-60: hsl(357, 76%, 49%);
   --ds-red-60-hover: hsl(357, 75%, 42%);
   --ds-red-50: hsl(357, 95%, 64%);
   --ds-red-40: hsl(357, 100%, 76%);
   --ds-red-30: hsl(356, 100%, 85%);
   --ds-red-20: hsl(357, 100%, 92%);
+  --ds-red-20-hover: hsl(357, 100%, 88%);
   --ds-red-10: hsl(0, 100%, 97%);
 
   --ds-magenta-100: hsl(334, 62%, 10%);
   --ds-magenta-90: hsl(334, 95%, 16%);
   --ds-magenta-80: hsl(334, 86%, 25%);
   --ds-magenta-70: hsl(334, 74%, 36%);
+  --ds-magenta-70-hover: hsl(334, 74%, 43%);
   --ds-magenta-60: hsl(334, 69%, 48%);
   --ds-magenta-50: hsl(334, 82%, 63%);
   --ds-magenta-40: hsl(334, 100%, 75%);
   --ds-magenta-30: hsl(334, 100%, 84%);
   --ds-magenta-20: hsl(334, 100%, 92%);
+  --ds-magenta-20-hover: hsl(334, 100%, 87%);
   --ds-magenta-10: hsl(332, 100%, 97%);
 
   --ds-purple-100: hsl(264, 52%, 12%);
   --ds-purple-90: hsl(264, 66%, 22%);
   --ds-purple-80: hsl(264, 65%, 33%);
   --ds-purple-70: hsl(265, 65%, 46%);
+  --ds-purple-70-hover: hsl(265, 65%, 54%);
   --ds-purple-60: hsl(264, 97%, 62%);
   --ds-purple-50: hsl(263, 100%, 72%);
   --ds-purple-40: hsl(263, 100%, 79%);
   --ds-purple-30: hsl(262, 100%, 87%);
   --ds-purple-20: hsl(263, 100%, 93%);
+  --ds-purple-20-hover: hsl(263, 100%, 89%);
   --ds-purple-10: hsl(258, 100%, 97%);
 
   --ds-blue-100 :hsl(224, 100%, 13%);
   --ds-blue-90 :hsl(224, 100%, 21%);
   --ds-blue-80 :hsl(223, 100%, 31%);
   --ds-blue-70 :hsl(220, 100%, 40%);
+  --ds-blue-70-hover :hsl(220, 100%, 50%);
   --ds-blue-60 :hsl(219, 99%, 53%);
   --ds-blue-60-hover :hsl(219, 97%, 46%);
   --ds-blue-50 :hsl(218, 100%, 64%);
   --ds-blue-40 :hsl(218, 100%, 74%);
   --ds-blue-30 :hsl(217, 100%, 83%);
   --ds-blue-20 :hsl(217, 100%, 91%);
+  --ds-blue-20-hover : hsl(217, 100%, 86%);
   --ds-blue-10 :hsl(213, 100%, 96%);
 
   --ds-cyan-100: hsl(209, 73%, 9%);
   --ds-cyan-90: hsl(208, 97%, 15%);
   --ds-cyan-80: hsl(208, 100%, 21%);
   --ds-cyan-70: hsl(208, 100%, 30%);
+  --ds-cyan-70-hover: hsl(208, 100%, 37%);
   --ds-cyan-60: hsl(205, 100%, 38%);
   --ds-cyan-50: hsl(204, 86%, 49%);
   --ds-cyan-40: hsl(203, 100%, 60%);
   --ds-cyan-30: hsl(203, 100%, 75%);
   --ds-cyan-20: hsl(202, 100%, 86%);
+  --ds-cyan-20-hover: hsl(202, 100%, 80%);
   --ds-cyan-10: hsl(201, 100%, 95%);
 
   --ds-teal-100: hsl(186, 56%, 7%);
   --ds-teal-90: hsl(187, 92%, 10%);
   --ds-teal-80: hsl(183, 100%, 13%);
   --ds-teal-70: hsl(180, 100%, 18%);
+  --ds-teal-70-hover: hsl(180, 100%, 22%);
   --ds-teal-60: hsl(178, 100%, 25%);
   --ds-teal-50: hsl(179, 100%, 31%);
   --ds-teal-40: hsl(179, 92%, 39%);
   --ds-teal-30: hsl(179, 69%, 55%);
   --ds-teal-20: hsl(180, 73%, 78%);
+  --ds-teal-20-hover: hsl(180, 73%, 62%);
   --ds-teal-10: hsl(180, 81%, 92%);
 
   --ds-green-100: hsl(123, 56%, 6%);
   --ds-green-90: hsl(135, 91%, 9%);
   --ds-green-80: hsl(138, 89%, 14%);
   --ds-green-70: hsl(138, 75%, 22%);
+  --ds-green-70-hover: hsl(138, 74%, 26%);
   --ds-green-60: hsl(138, 67%, 30%);
   --ds-green-50: hsl(137, 63%, 39%);
   --ds-green-40: hsl(137, 49%, 50%);
   --ds-green-30: hsl(136, 61%, 65%);
   --ds-green-20: hsl(136, 71%, 80%);
+  --ds-green-20-hover: hsl(136, 71%, 68%);
   --ds-green-10: hsl(137, 78%, 93%);
 
   --ds-black: hsl(0, 0%, 0%);
   --ds-white: hsl(0, 0%, 100%);
+  --ds-yellow: #f1c21b;
+  --ds-orange: #ff832b;
 
   --ds-cool-gray-100: hsl(206, 16%, 8%);
   --ds-cool-gray-90: hsl(200, 12%, 15%);
   --ds-cool-gray-80: hsl(207, 10%, 23%);
   --ds-cool-gray-70: hsl(207, 7%, 32%);
+  --ds-cool-gray-70-hover: hsl(208, 7%, 39%);
   --ds-cool-gray-60: hsl(210, 6%, 44%);
   --ds-cool-gray-50: hsl(216, 7%, 56%);
   --ds-cool-gray-40: hsl(210, 8%, 66%);
   --ds-cool-gray-30: hsl(210, 11%, 78%);
   --ds-cool-gray-20: hsl(213, 15%, 88%);
+  --ds-cool-gray-20-hover: hsl(212, 15%, 83%);
   --ds-cool-gray-10: hsl(220, 30%, 96%);
 
   --ds-gray-100: hsl(0, 0%, 9%);
@@ -121,11 +139,13 @@
   --ds-warm-gray-90: hsl(0, 3%, 15%);
   --ds-warm-gray-80: hsl(0, 3%, 23%);
   --ds-warm-gray-70: hsl(0, 3%, 33%);
+  --ds-warm-gray-70-hover: hsl(0, 3%, 40%);
   --ds-warm-gray-60: hsl(0, 2%, 44%);
   --ds-warm-gray-50: hsl(0, 2%, 55%);
   --ds-warm-gray-40: hsl(0, 3%, 67%);
   --ds-warm-gray-30: hsl(10, 5%, 78%);
   --ds-warm-gray-20: hsl(10, 10%, 89%);
+  --ds-warm-gray-20-hover: hsl(7, 10%, 83%);
   --ds-warm-gray-10: hsl(12, 24%, 96%);
 
   /* Token from Enterprise Design Sytem */
@@ -179,9 +199,51 @@
   --ds-border-inverse: var(--ds-gray-100); /*Màu viền có độ tương phản màu 4.5:1 AA trên tất cả các layer, đây là màu viên có độ tương phản cao nhất*/
   --ds-border-disabled: var(--ds-gray-30); /*Màu viền trạng thái disabled cho tất cả border (ngoại trừ border-subtle)*/
 
-  --background: var(--ds-background);
-  --foreground: var(--ds-text-primary);
+  /*4. Chữ - Text*/
+  --ds-text-primary: var(--ds-gray-100);
+  --ds-text-secondary: var(--ds-gray-70);
+  --ds-text-placeholder: var(--ds-gray-40);
+  --ds-text-on-color: var(--ds-white);
+  --ds-text-on-color-disabled: var(--ds-gray-50);
+  --ds-text-helper: var(--ds-gray-60);
+  --ds-text-error: var(--ds-red-60);
+  --ds-text-inverse: var(--ds-white);
+  --ds-text-disabled: hsl(var(--ds-gray-100) / 25);
 
+  /*5. Đường dẫn - Link*/
+  --ds-link-primary: var(--ds-blue-60); /*Màu cho đường dẫn primary hoặc nút ghost*/
+  --ds-link-primary-hover: var(--ds-blue-70); /*Màu cho trạng thái hover của $link-primary*/
+  --ds-link-secondary: var(--ds-blue-70); /*Màu cho đường dẫn secondary cho màu nền có độ tương phản thấp hơn*/
+  --ds-link-inverse: var(--ds-blue-40); /*Màu cho đường dẫn khi có màu nền là $inverse-02*/
+  --ds-link-inverse-hover: var(--ds-blue-30); /*Màu cho đường dẫn ở trạng thái hover khi có màu nền là $background-inverse*/
+  --ds-link-inverse-active: var(--ds-gray-10); /*Màu cho đường dẫn ở trạng thái active khi có màu nền là $background-inverse*/
+  --ds-link-visited: var(--ds-purple-60); /*Màu đường dẫn đã được truy cập trước đó*/
+  --ds-inverse-visited: var(--ds-purple-40); /*Màu đường dẫn đã được truy cập trước đó khi có màu nền là $background-inverse*/
+
+  /*6. Biểu tượng - Icon*/
+  --ds-icon-primary: var(--ds-gray-100);/* Màu cho primary icon */
+  --ds-icon-secondary: var(--ds-gray-70); /*Màu cho secondary icon */
+  --ds-icon-on-color: var(--ds-white); /*Màu cho các icon có tính tương tác hoặc icon không phải ui colors*/
+  --ds-icon-on-color-disabled: var(--ds-gray-50); /*Màu trạng thái disabled cho $icon-on-color*/
+  --ds-icon-interactive: var(--ds-blue-60); /*Màu biểu tượng icon*/
+  --ds-icon-inverse: var(--ds-white); /*Màu tương phản text, và icon*/
+  --ds-icon-disabled: hsl(var(--ds-gray-100) / 25); /*Màu biểu tượng icon tại trạng thái disabled*/
+
+
+  /*7. Hỗ trợ - Support */
+  --ds-support-error: var(--ds-red-60);
+  --ds-support-success: var(--ds-green-50);
+  --ds-support-warning: var(--ds-yellow);
+  --ds-support-info: var(--ds-blue-70);
+  --ds-support-error-inverse: var(--ds-red-50);
+  --ds-support-success-inverse: var(--ds-green-40);
+  --ds-support-warning-inverse: var(--ds-yellow);
+  --ds-support-info-inverse: var(--ds-blue-50);
+  --ds-support-caution-major: var(--ds-orange);
+  --ds-support-caution-minor: var(--ds-yellow);
+  --ds-support-undefined: var(--ds-purple-60);
+
+  /*8. Nút - Button*/
   --ds-button-primary: var(--ds-blue-60);
   --ds-button-primary-hover: var(--ds-blue-60-hover);
   --ds-button-primary-active: var(--ds-blue-80);
@@ -198,26 +260,87 @@
   --ds-button-separator: var(--ds-gray-20);
   --ds-button-disabled: var(--ds-gray-30);
 
-  /*4. Chữ - Text*/
-  --ds-text-primary: var(--ds-gray-100);
-  --ds-text-secondary: var(--ds-gray-70);
-  --ds-text-placeholder: var(--ds-gray-40);
-  --ds-text-on-color: var(--ds-white);
-  --ds-text-on-color-disabled: var(--ds-gray-50);
-  --ds-text-helper: var(--ds-gray-60);
-  --ds-text-error: var(--ds-red-60);
-  --ds-text-inverse: var(--ds-white);
-  --ds-text-disabled: hsl(var(--ds-gray-100) / 25);
+  /*9. Thẻ - Tag*/
+  --ds-tag-background-gray: var(--ds-gray-20);
+  --ds-tag-color-gray: var(--ds-gray-100);
+  --ds-tag-hover-gray: var(--ds-gray-20-hover);
+  --ds-tag-border-gray: var(--ds-gray-40);
 
-  /*5. Đường dẫn - Link*/
-  --ds-link-primary: var(--ds-blue-60); /*Màu cho đường dẫn primary hoặc nút ghost*/
-  --ds-link-primary-hover: var(--ds-blue-70); /*Màu cho trạng thái hover của $link-primary*/
-  --ds-link-secondary: var(--ds-blue-70); /*Màu cho đường dẫn secondary cho màu nền có độ tương phản thấp hơn*/
+  --ds-tag-background-cool-gray: var(--ds-cool-gray-20);
+  --ds-tag-color-cool-gray: var(--ds-cool-gray-100);
+  --ds-tag-hover-cool-gray: var(--ds-cool-gray-20-hover);
+  --ds-tag-border-cool-gray: var(--ds-cool-gray-40);
 
+  --ds-tag-background-warm-gray: var(--ds-warm-gray-20);
+  --ds-tag-color-warm-gray: var(--ds-warm-gray-100);
+  --ds-tag-hover-warm-gray: var(--ds-warm-gray-20-hover);
+  --ds-tag-border-warm-gray: var(--ds-warm-gray-40);
 
+  --ds-tag-background-red: var(--ds-red-20);
+  --ds-tag-color-red: var(--ds-red-70);
+  --ds-tag-hover-red: var(--ds-red-20-hover);
+  --ds-tag-border-red: var(--ds-red-40);
+
+  --ds-tag-background-magenta: var(--ds-magenta-20);
+  --ds-tag-color-magenta: var(--ds-magenta-70);
+  --ds-tag-hover-magenta: var(--ds-magenta-20-hover);
+  --ds-tag-border-magenta: var(--ds-magenta-40);
+
+  --ds-tag-background-purple: var(--ds-purple-20);
+  --ds-tag-color-purple: var(--ds-purple-70);
+  --ds-tag-hover-purple: var(--ds-purple-20-hover);
+  --ds-tag-border-purple: var(--ds-purple-40);
+
+  --ds-tag-background-blue: var(--ds-blue-20);
+  --ds-tag-color-blue: var(--ds-blue-70);
+  --ds-tag-hover-blue: var(--ds-blue-20-hover);
+  --ds-tag-border-blue: var(--ds-blue-40);
+
+  --ds-tag-background-cyan: var(--ds-cyan-20);
+  --ds-tag-color-cyan: var(--ds-cyan-70);
+  --ds-tag-hover-cyan: var(--ds-cyan-20-hover);
+  --ds-tag-border-cyan: var(--ds-cyan-40);
+
+  --ds-tag-background-teal: var(--ds-teal-20);
+  --ds-tag-color-teal: var(--ds-teal-70);
+  --ds-tag-hover-teal: var(--ds-teal-20-hover);
+  --ds-tag-border-teal: var(--ds-teal-40);
+
+  --ds-tag-background-green: var(--ds-green-20);
+  --ds-tag-color-green: var(--ds-green-70);
+  --ds-tag-hover-green: var(--ds-green-20-hover);
+  --ds-tag-border-green: var(--ds-green-40);
+
+  /*10. Content switcher*/
+  --ds-content-switcher-background: var(--ds-gray-20);
+  --ds-content-switcher-background-hover: var(--ds-gray-20-hover);
+  --ds-content-switcher-selected: var(--ds-white);
+
+  /*11. Focus */
   --ds-focus: var(--ds-blue-60);
   --ds-focus-inset: var(--ds-white);
   --ds-focus-inverse: var(--ds-white);
+
+  /*12. Bóng đổ - Shadow*/
+  --ds-shadows-menu: 0 2px 6px 0 rgba(0,0,0,.3);
+
+  /*13. Khoảng cách - Spacing*/
+  --ds-spacing-01: .125rem; /*2px*/
+  --ds-spacing-02: .25rem; /*4px*/
+  --ds-spacing-03: .5rem; /*8px*/
+  --ds-spacing-04: .75rem; /*12px*/
+  --ds-spacing-05: 1rem; /*16px*/
+  --ds-spacing-06: 1.5rem; /*24px*/
+  --ds-spacing-07: 2rem; /*32px*/
+  --ds-spacing-08: 2.5rem; /*40px*/
+  --ds-spacing-09: 3rem; /*48px*/
+  --ds-spacing-10: 4rem; /*64px*/
+  --ds-spacing-11: 5rem; /*80px*/
+  --ds-spacing-12: 6rem; /*96px*/
+  --ds-spacing-13: 10rem; /*160px*/
+
+  --background: var(--ds-background);
+  --foreground: var(--ds-text-primary);
 
   /* Button colors */
   --color-lm-button-primary: #0f62fe;
@@ -356,10 +479,39 @@
     --ds-text-inverse: var(--ds-gray-100);
     --ds-text-disabled: hsl(var(--ds-gray-10) / 25);
 
+    /*5. Đường dẫn - Link*/
+    --ds-link-primary: var(--ds-blue-40); /*Màu cho đường dẫn primary hoặc nút ghost*/
+    --ds-link-primary-hover: var(--ds-blue-30); /*Màu cho trạng thái hover của $link-primary*/
+    --ds-link-secondary: var(--ds-blue-30); /*Màu cho đường dẫn secondary cho màu nền có độ tương phản thấp hơn*/
+    --ds-link-inverse: var(--ds-blue-60); /*Màu cho đường dẫn khi có màu nền là $inverse-02*/
+    --ds-link-inverse-hover: var(--ds-blue-70); /*Màu cho đường dẫn ở trạng thái hover khi có màu nền là $background-inverse*/
+    --ds-link-inverse-active: var(--ds-gray-100); /*Màu cho đường dẫn ở trạng thái active khi có màu nền là $background-inverse*/
+    --ds-link-visited: var(--ds-purple-40); /*Màu đường dẫn đã được truy cập trước đó*/
+    --ds-inverse-visited: var(--ds-purple-60); /*Màu đường dẫn đã được truy cập trước đó khi có màu nền là $background-inverse*/
 
-    --background: var(--ds-background);
-    --foreground: var(--ds-text-primary);
+    /*6. Biểu tượng - Icon*/
+    --ds-icon-primary: var(--ds-gray-10);/* Màu cho primary icon */
+    --ds-icon-secondary: var(--ds-gray-30); /*Màu cho secondary icon */
+    --ds-icon-on-color: var(--ds-white); /*Màu cho các icon có tính tương tác hoặc icon không phải ui colors*/
+    --ds-icon-on-color-disabled: var(--ds-gray-50); /*Màu trạng thái disabled cho $icon-on-color*/
+    --ds-icon-interactive: var(--ds-white); /*Màu biểu tượng icon*/
+    --ds-icon-inverse: var(--ds-gray-100); /*Màu tương phản text, và icon*/
+    --ds-icon-disabled: hsl(var(--ds-gray-10) / 25); /*Màu biểu tượng icon tại trạng thái disabled*/
 
+    /*7. Hỗ trợ - Support */
+    --ds-support-error: var(--ds-red-40);
+    --ds-support-success: var(--ds-green-40);
+    --ds-support-warning: var(--ds-yellow);
+    --ds-support-info: var(--ds-blue-50);
+    --ds-support-error-inverse: var(--ds-red-60);
+    --ds-support-success-inverse: var(--ds-green-50);
+    --ds-support-warning-inverse: var(--ds-yellow);
+    --ds-support-info-inverse: var(--ds-blue-70);
+    --ds-support-caution-major: var(--ds-orange);
+    --ds-support-caution-minor: var(--ds-yellow);
+    --ds-support-undefined: var(--ds-purple-50);
+
+    /*8. Nút - Button*/
     --ds-button-primary: var(--ds-blue-60);
     --ds-button-primary-hover: var(--ds-blue-60-hover);
     --ds-button-primary-active: var(--ds-blue-80);
@@ -375,6 +527,65 @@
     --ds-button-danger-active: var(--ds-red-80);
     --ds-button-separator: var(--ds-gray-100);
     --ds-button-disabled: var(--ds-gray-60);
+
+    /*9. Thẻ - Tag*/
+    --ds-tag-background-gray: var(--ds-gray-70);
+    --ds-tag-color-gray: var(--ds-gray-120);
+    --ds-tag-hover-gray: var(--ds-gray-70-hover);
+    --ds-tag-border-gray: var(--ds-gray-50);
+
+    --ds-tag-background-cool-gray: var(--ds-cool-gray-70);
+    --ds-tag-color-cool-gray: var(--ds-cool-gray-120);
+    --ds-tag-hover-cool-gray: var(--ds-cool-gray-70-hover);
+    --ds-tag-border-cool-gray: var(--ds-cool-gray-50);
+
+    --ds-tag-background-warm-gray: var(--ds-warm-gray-70);
+    --ds-tag-color-warm-gray: var(--ds-warm-gray-120);
+    --ds-tag-hover-warm-gray: var(--ds-warm-gray-70-hover);
+    --ds-tag-border-warm-gray: var(--ds-warm-gray-50);
+
+    --ds-tag-background-red: var(--ds-red-70);
+    --ds-tag-color-red: var(--ds-red-20);
+    --ds-tag-hover-red: var(--ds-red-70-hover);
+    --ds-tag-border-red: var(--ds-red-50);
+
+    --ds-tag-background-magenta: var(--ds-magenta-70);
+    --ds-tag-color-magenta: var(--ds-magenta-20);
+    --ds-tag-hover-magenta: var(--ds-magenta-70-hover);
+    --ds-tag-border-magenta: var(--ds-magenta-50);
+
+    --ds-tag-background-purple: var(--ds-purple-70);
+    --ds-tag-color-purple: var(--ds-purple-20);
+    --ds-tag-hover-purple: var(--ds-purple-70-hover);
+    --ds-tag-border-purple: var(--ds-purple-50);
+
+    --ds-tag-background-blue: var(--ds-blue-70);
+    --ds-tag-color-blue: var(--ds-blue-20);
+    --ds-tag-hover-blue: var(--ds-blue-70-hover);
+    --ds-tag-border-blue: var(--ds-blue-50);
+
+    --ds-tag-background-cyan: var(--ds-cyan-70);
+    --ds-tag-color-cyan: var(--ds-cyan-20);
+    --ds-tag-hover-cyan: var(--ds-cyan-70-hover);
+    --ds-tag-border-cyan: var(--ds-cyan-50);
+
+    --ds-tag-background-teal: var(--ds-teal-70);
+    --ds-tag-color-teal: var(--ds-teal-20);
+    --ds-tag-hover-teal: var(--ds-teal-70-hover);
+    --ds-tag-border-teal: var(--ds-teal-50);
+
+    --ds-tag-background-green: var(--ds-green-70);
+    --ds-tag-color-green: var(--ds-green-20);
+    --ds-tag-hover-green: var(--ds-green-70-hover);
+    --ds-tag-border-green: var(--ds-green-50);
+
+    /*10. Content switcher*/
+    --ds-content-switcher-background: transparent;
+    --ds-content-switcher-background-hover: hsl(var(--ds-gray-50) / 12);
+    --ds-content-switcher-selected: hsl(var(--ds-gray-50) / 24);
+
+    --background: var(--ds-background);
+    --foreground: var(--ds-text-primary);
   }
 }
 
