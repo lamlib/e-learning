@@ -339,6 +339,14 @@
   --ds-spacing-12: 6rem; /*96px*/
   --ds-spacing-13: 10rem; /*160px*/
 
+  /*14. Field */
+  --ds-field-01: hsl(0, 0%, 96%);
+  --ds-field-02: hsl(0, 0%, 100%);
+  --ds-field-03: hsl(0, 0%, 96%);
+  --ds-field-hover-01: hsl(0, 0%, 91%);
+  --ds-field-hover-02: hsl(0, 0%, 91%);
+  --ds-field-hover-03: hsl(0, 0%, 91%);
+
   --background: var(--ds-background);
   --foreground: var(--ds-text-primary);
 
@@ -584,6 +592,14 @@
     --ds-content-switcher-background-hover: hsl(var(--ds-gray-50) / 12);
     --ds-content-switcher-selected: hsl(var(--ds-gray-50) / 24);
 
+      /*14. Field */
+    --ds-field-01: hsl(0, 0%, 22%);
+    --ds-field-02: hsl(0, 0%, 32%);
+    --ds-field-03: hsl(0, 0%, 44%);
+    --ds-field-hover-01: hsl(0, 0%, 28%);
+    --ds-field-hover-02: hsl(0, 0%, 39%);
+    --ds-field-hover-03: hsl(0, 0%, 37%);
+
     --background: var(--ds-background);
     --foreground: var(--ds-text-primary);
   }
@@ -613,6 +629,43 @@
   --color-ds-button-danger-active: var(--ds-button-danger-active);
   --color-ds-button-separator: var(--ds-button-separator);
   --color-ds-button-disabled: var(--ds-button-disabled);
+
+  /*3. Đường viền - Border*/
+  --color-ds-border-interactive: var(--ds-border-interactive);
+  --color-ds-border-subtle-00: var(--ds-border-subtle-00);
+  --color-ds-border-subtle-01: var(--ds-border-subtle-01);
+  --color-ds-border-subtle-02: var(--ds-border-subtle-02);
+  --color-ds-border-subtle-03: var(--ds-border-subtle-03);
+  --color-ds-border-subtle-selected-01: var(--ds-border-subtle-selected-01);
+  --color-ds-border-subtle-selected-02: var(--ds-border-subtle-selected-02);
+  --color-ds-border-subtle-selected-03: var(--ds-border-subtle-selected-03);
+  --color-ds-border-strong-01: var(--ds-border-strong-01);
+  --color-ds-border-strong-02: var(--ds-border-strong-02);
+  --color-ds-border-strong-03: var(--ds-border-strong-03);
+  --color-ds-border-tile-01: var(--ds-border-tile-01);
+  --color-ds-border-tile-02: var(--ds-border-tile-02);
+  --color-ds-border-tile-03: var(--ds-border-tile-03);
+  --color-ds-border-inverse: var(--ds-border-inverse);
+  --color-ds-border-disabled: var(--ds-border-disabled);
+
+  /*4. Chữ - Text*/
+  --color-ds-text-primary: var(--ds-text-primary);
+  --color-ds-text-secondary: var(--ds-text-secondary);
+  --color-ds-text-placeholder: var(--ds-text-placeholder);
+  --color-ds-text-on-color: var(--ds-text-on-color);
+  --color-ds-text-on-color-disabled: var(--ds-text-on-color-disabled);
+  --color-ds-text-helper: var(--ds-text-helper);
+  --color-ds-text-error: var(--ds-text-error);
+  --color-ds-text-inverse: var(--ds-text-inverse);
+  --color-ds-text-disabled: var(--ds-text-disabled);
+
+  /*14. Field*/
+  --color-ds-field-01: var(--ds-field-01);
+  --color-ds-field-02: var(--ds-field-02);
+  --color-ds-field-03: var(--ds-field-03);
+  --color-ds-field-hover-01: var(--ds-field-hover-01);
+  --color-ds-field-hover-02: var(--ds-field-hover-02);
+  --color-ds-field-hover-03: var(--ds-field-hover-03);
 
   --color-ds-focus: var(--ds-focus);
   --color-ds-focus-inset: var(--ds-focus-inset);
