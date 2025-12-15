@@ -9,11 +9,29 @@ Tiến hành cài đặt maven và run thử project demo:
 mvn archetype:generate
 
 ```
-Với các tham số sau: 
+Với các tham số sau:
 - Khởi tạo từ archetype 2031
 - Group Id là com.lamlib
 - Package là com.lamlib.learning
 - Artifact Id là learning
+
+Các gói được khởi tạo ban đầu là:
+- Dependency management: junit-bom
+- Dependency: junit-jupiter-api
+- Dependency: junit-jupiter-params
+- Dependency: junit-jupiter-params
+- Dependency: junit-jupiter-params
+- Dependency: junit-jupiter-params
+- Build: maven-clean-plugin
+- Build: maven-resources-plugin
+- Build: maven-compiler-plugin
+- Build: maven-surefire-plugin
+- Build: maven-jar-plugin
+- Build: maven-install-plugin
+- Build: maven-deploy-plugin
+- Build: maven-site-plugin
+- Build: maven-site-plugin
+- Build: maven-project-info-reports-plugin
 
 Để chạy project với maven bạn cần chạy các lệnh trong [Maven Build Lifecycle](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html):
 - validate: Kiểm tra dự án đã cấu hình hợp lệ và đầy đủ thông tin cần thiết.
@@ -70,17 +88,14 @@ project-name
 │   │   │   ├── static
 │   │   │   │   ├── css
 │   │   │   │   ├── js
-│   │   │   │   └── images
-│   │   │   ├── templates
-│   │   │   │   └── *.html (Thymeleaf)
+│   │   │   │   └── img
 │   │   │   ├── application.properties
 │   │   │   └── application.yml
 │   │   │
-│   │   └── webapp   (nếu dùng JSP)
+│   │   └── webapp
 │   │       └── WEB-INF
 │   │           ├── views
-│   │           │   └── *.jsp
-│   │           └── web.xml (nếu không dùng Boot)
+│   │               └── *.jsp
 │   │
 │   └── test
 │       └── java
@@ -90,6 +105,13 @@ project-name
 ```
 
 Lựa chọn phát triển bằng [MVC với JSP](https://docs.spring.io/spring-framework/reference/web/webmvc-view/mvc-jsp.html)
+Cài đặt thêm các package sau:
+- Dependency: tomcat-embed-jasper
+- Dependency: jakarta.servlet.jsp.jstl-api
+- Dependency: jakarta.servlet.jsp.jstl
+
+Do sử dụng JSP làm template engine yêu cầu Tomcat, do đó cần build file war thay vì jar.
+Cấu hình war package tại file POM.
 
 
 
