@@ -2,8 +2,8 @@
 
 ## Tài liệu đề xuất kiến trúc Frontend cho hệ thống E-learning
 
-**Version:** 1.0.0  
-**Date:** 2025  
+**Version:** 1.0.0 
+**Date:** 2025
 **Author:** Lamlib
 
 ---
