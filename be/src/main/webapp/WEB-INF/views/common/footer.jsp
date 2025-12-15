@@ -1,0 +1,1 @@
+<footer>${param.text}</footer>
